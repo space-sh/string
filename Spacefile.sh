@@ -17,7 +17,7 @@
 #============
 # STRING_TRIM
 #
-# Trim whitespace from a string left and right.
+# Trim whitespace (spaces and tabs) from a string left and right.
 #
 # Parameters:
 #   $1: the name of the variable to trim.
@@ -32,6 +32,32 @@
 #============
 STRING_TRIM()
 {
-    eval "${1}=\"\${$1#\"\${$1%%[^ ]*}\"}\""
-    eval "${1}=\"\${$1%\"\${$1##*[^ ]}\"}\""
+    local __sopriv=
+    eval "__sopriv=\"${1}\""
+    while true; do
+        eval "${1}=\"\${$1#\"\${$1%%[^ ]*}\"}\""
+        eval "${1}=\"\${$1%\"\${$1##*[^ ]}\"}\""
+        eval "${1}=\"\${$1#\"\${$1%%[^$'\t']*}\"}\""
+        eval "${1}=\"\${$1%\"\${$1##*[^$'\t']}\"}\""
+        if eval "[ \"\${${1}}\" = \"\${__sopriv}\" ]"; then
+            break
+        fi
+        eval "__sopriv=\"\${${1}}\""
+    done
+}
+
+#=============
+# STRING_SUBST
+#
+# Substitute text in place.
+#
+# Parameters:
+#   $1: variable name to substitute in.
+#   $2: text to substitute.
+#   $3: text to insert.
+#
+#=============
+STRING_SUBST()
+{
+    eval "${1}=\${${1}//\${2}/\${3}}"
 }
