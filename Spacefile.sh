@@ -61,3 +61,45 @@ STRING_SUBST()
 {
     eval "${1}=\${${1}//\${2}/\${3}}"
 }
+
+#=============
+# STRING_INDEXOF
+#
+# Find the first index of sub string in string.
+#
+# Parameters:
+#   $1: sub string to search for.
+#   $2: string to search in.
+#   $3: optional variable name to store index value to. -1 whensub string  not found.
+#
+# Returns:
+#   0: if sub string found and no $3 variable name is given.
+#   1: if sub string not found and no $3 variable name is given.
+#
+#=============
+STRING_INDEXOF()
+{
+    local substr="${1}"
+    shift
+
+    local string="${1}"
+    shift
+
+    local varname="${1-}"
+    shift $(( $# > 0 ? 1 : 0 ))
+
+    local rest="${string%%${substr}*}"
+
+    if [ "${rest}" = "${string}" ]; then
+        if [ -n "${varname}" ]; then
+            eval "${varname}=\"-1\""
+        else
+            return 1
+        fi
+    fi
+
+    if [ -n "${varname}" ]; then
+        eval "${varname}=\"${#rest}\""
+    fi
+    return 0
+}
