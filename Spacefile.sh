@@ -53,13 +53,54 @@ STRING_TRIM()
 #
 # Parameters:
 #   $1: variable name to substitute in.
-#   $2: text to substitute.
-#   $3: text to insert.
+#   $2: text to substitute away.
+#   $3: text to insert in place.
+#   $4: global, set to "1" to substitute all occurrences.
 #
 #=============
 STRING_SUBST()
 {
-    eval "${1}=\${${1}//\${2}/\${3}}"
+    local __varname="${1}"
+    local __string=
+    eval "__string=\"\${$1}\""
+    shift
+
+    local __subst="${1}"
+    shift
+
+    local __replace="${1}"
+    shift
+
+    local __global="${1:-0}"
+    shift $(( $# > 0 ? 1 : 0 ))
+
+    local __lstring=
+    local __rstring=
+    local __tag="___SpaceGalWasHere___"
+    # First replace with the obscure tag.
+    # This is to not end up in forever loop subst in subst.
+    while true; do
+        __lstring="${__string%%${__subst}*}"
+        if [ "${__lstring}" = "${__string}" ]; then
+            # No more matches.
+            break
+        fi
+        __rstring="${__string#*${__subst}}"
+        __string="${__lstring}${__tag}${__rstring}"
+        if [ "${__global}" -ne 1 ]; then
+            break
+        fi
+    done
+    while true; do
+        __lstring="${__string%%${__tag}*}"
+        if [ "${__lstring}" = "${__string}" ]; then
+            # No more matches.
+            break
+        fi
+        __rstring="${__string#*${__tag}}"
+        __string="${__lstring}${__replace}${__rstring}"
+    done
+    eval "${__varname}=\"\${__string}\""
 }
 
 #=============
