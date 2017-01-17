@@ -14,6 +14,10 @@
 # limitations under the License.
 #
 
+
+# Disable warning about local keyword
+# shellcheck disable=SC2039
+
 #============
 # STRING_TRIM
 #
@@ -32,6 +36,7 @@
 #============
 STRING_TRIM()
 {
+    # shellcheck disable=SC2034
     local __sopriv=
     eval "__sopriv=\"\${${1}}\""
     while true; do
@@ -45,6 +50,10 @@ STRING_TRIM()
         eval "__sopriv=\"\${${1}}\""
     done
 }
+
+
+# Disable warning about local keyword
+# shellcheck disable=SC2039
 
 #=============
 # STRING_SUBST
@@ -102,6 +111,10 @@ STRING_SUBST()
     done
     eval "${__varname}=\"\${__string}\""
 }
+
+
+# Disable warning about local keyword
+# shellcheck disable=SC2039
 
 #=============
 # STRING_INDEXOF
