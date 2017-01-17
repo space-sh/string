@@ -124,7 +124,7 @@ STRING_SUBST()
 # Parameters:
 #   $1: sub string to search for.
 #   $2: string to search in.
-#   $3: optional variable name to store index value to. -1 whensub string  not found.
+#   $3: optional variable name to store index value to. -1 when sub string  not found.
 #
 # Returns:
 #   0: if sub string found and no $3 variable name is given.
