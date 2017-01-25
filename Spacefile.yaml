@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 #
-
+---
 _info:
     title: String manipulation module
 
@@ -23,3 +23,4 @@ _dep_install:
         title: Verify dependencies for this module.
     _env:
         - RUN: :
+...
