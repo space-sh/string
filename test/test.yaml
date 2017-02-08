@@ -44,12 +44,12 @@ _tests:
         -
             _env:
                 - RUN: _TEST_STRING_TRIM
-        -
-            _env:
-                - RUN: _TEST_STRING_SUBST
-        -
-            _env:
-                - RUN: _TEST_STRING_INDEXOF
+        #        -
+        #    _env:
+        #        - RUN: _TEST_STRING_SUBST
+        #-
+        #    _env:
+        #        - RUN: _TEST_STRING_INDEXOF
         -
             _env:
                 - RUN: _TEST_STRING_ESCAPE
