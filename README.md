@@ -44,11 +44,59 @@ Find the first index of sub string in string.
 ### Parameters:  
 - $1: sub string to search for.  
 - $2: string to search in.  
-- $3: optional variable name to store index value to. -1 when sub string  not found.  
+- $3: optional variable name to store index value to. -1 when sub string not found.  
   
 ### Returns:  
 - 0: if sub string found and no $3 variable name is given.  
 - 1: if sub string not found and no $3 variable name is given.  
+  
+  
+  
+## STRING\_ESCAPE()  
+  
+  
+  
+Escape in place up the occurrences of quotes, dollar signs and parenthesis.  
+  
+It is optional which of ", $, ( and ) to escape.  
+  
+### Parameters:  
+- $1: Name of the variable to escape up, in place.  
+- $2: Optional which characters to escape, defaults to '"$()'.  
+  
+  
+  
+## \_STRING\_ESCAPE()  
+  
+  
+  
+Helper function.  
+  
+  
+  
+## STRING\_ITEM\_COUNT()  
+  
+  
+  
+Count all items in a string, split on current IFS.  
+  
+### Parameters:  
+- $1: string to count items in.  
+- $2: variable name to store count in  
+  
+  
+  
+## STRING\_ITEM\_GET()  
+  
+  
+  
+Get an item in a string by it's index,  
+where string is split on the current IFS.  
+  
+### Parameters:  
+- $1: string to get item from.  
+- $2: index of item to get.  
+- $3: variable name to store item to.  
   
   
   
