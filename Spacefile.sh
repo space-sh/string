@@ -201,6 +201,7 @@ STRING_ESCAPE()
 #===============
 _STRING_ESCAPE()
 {
+    # shellcheck disable=2034
     SPACE_DEP="STRING_SUBST"
 
     STRING_SUBST "${1}" "${2}" "\\${2}" "1"
@@ -249,6 +250,7 @@ STRING_ITEM_COUNT()
 #================
 STRING_ITEM_GET()
 {
+    # shellcheck disable=2034
     SPACE_SIGNATURE="string itemindex outvarname"
 
     local __s="${1}"
