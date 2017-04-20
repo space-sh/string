@@ -36,7 +36,7 @@
 #============
 STRING_TRIM()
 {
-    SPACE_SIGNATURE="varname"
+    SPACE_SIGNATURE="varname:1"
 
     # shellcheck disable=SC2034
     local __sopriv=
@@ -72,7 +72,7 @@ STRING_TRIM()
 #=============
 STRING_SUBST()
 {
-    SPACE_SIGNATURE="varname match replace [global]"
+    SPACE_SIGNATURE="varname:1 match:1 replace:1 [global]"
 
     local __varname="${1}"
     local __rstring=
@@ -126,7 +126,7 @@ STRING_SUBST()
 #=============
 STRING_INDEXOF()
 {
-    SPACE_SIGNATURE="substring string [outvarname]"
+    SPACE_SIGNATURE="substring:1 string:1 [outvarname]"
 
     local substr="${1}"
     shift
@@ -165,10 +165,11 @@ STRING_INDEXOF()
 #   $1: Name of the variable to escape up, in place.
 #   $2: Optional which characters to escape, defaults to '"$()'.
 #
+# TODO: add &|<> ?
 #=============
 STRING_ESCAPE()
 {
-    SPACE_SIGNATURE="varname [escapes]"
+    SPACE_SIGNATURE="varname:1 [escapes]"
     SPACE_DEP="_STRING_ESCAPE"
 
     case "${2-\"\$\(\)}" in
@@ -220,7 +221,7 @@ _STRING_ESCAPE()
 #==================
 STRING_ITEM_COUNT()
 {
-    SPACE_SIGNATURE="string outvarname"
+    SPACE_SIGNATURE="string:1 outvarname:1"
 
     local __s="${1}"
     shift
@@ -251,7 +252,7 @@ STRING_ITEM_COUNT()
 STRING_ITEM_GET()
 {
     # shellcheck disable=2034
-    SPACE_SIGNATURE="string itemindex outvarname"
+    SPACE_SIGNATURE="string:1 itemindex:1 outvarname:1"
 
     local __s="${1}"
     shift
