@@ -205,8 +205,22 @@ _STRING_ESCAPE()
     # shellcheck disable=2034
     SPACE_DEP="STRING_SUBST"
 
-    STRING_SUBST "${1}" "${2}" "\\${2}" "1"
-    STRING_SUBST "${1}" '\\\\'${2} '\\\'${2} "1"
+    local __count=0
+    local __a=
+    for __a in '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ""; do
+        __count=$((__count+1))
+        __a="$__a\\${2}"
+        local __tag="_SPACEGAL_SUBST_TAG333_${__count}"
+        STRING_SUBST "${1}" "${__a}" "$__tag" "1"
+
+    done
+    __count=0
+    for __a in '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ''; do
+        __count=$((__count+1))
+        __a="$__a\\${2}"
+        local __tag="_SPACEGAL_SUBST_TAG333_${__count}"
+        STRING_SUBST "${1}" "${__tag}" "$__a" "1"
+    done
 }
 
 #==================
