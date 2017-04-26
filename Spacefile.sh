@@ -165,10 +165,10 @@ STRING_INDEXOF()
 #   $1: Name of the variable to escape up, in place.
 #   $2: Optional which characters to escape, defaults to '"$()'.
 #
-# TODO: add &|<> ?
 #=============
 STRING_ESCAPE()
 {
+    # TODO: add &|<> ?
     SPACE_SIGNATURE="varname:1 [escapes]"
     SPACE_DEP="_STRING_ESCAPE"
 
