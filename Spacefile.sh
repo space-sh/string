@@ -194,6 +194,10 @@ STRING_ESCAPE()
     esac
 }
 
+
+# Disable warning about local keyword
+# shellcheck disable=2039
+
 #===============
 # _STRING_ESCAPE
 #
@@ -223,6 +227,10 @@ _STRING_ESCAPE()
     done
 }
 
+
+# Disable warning about local keyword
+# shellcheck disable=2039
+
 #==================
 # STRING_ITEM_COUNT
 #
@@ -250,6 +258,10 @@ STRING_ITEM_COUNT()
     done
     eval "${__outvar}=\"\${__count}\""
 }
+
+
+# Disable warning about local keyword
+# shellcheck disable=2039
 
 #================
 # STRING_ITEM_GET
