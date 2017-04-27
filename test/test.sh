@@ -181,8 +181,8 @@ _TEST_STRING_ESCAPE()
 
     local text='A test "of quotes" and $variables \${abcd} $(ls)'
     local text1='A test \"of quotes\" and \$variables \\\${abcd} \$\(ls\)'
-    local text2='A test \\\"of quotes\\\" and \\\$variables \\\\\${abcd} \\\$\\\(ls\\\)'
-    local text3='A test \\\\\"of quotes\\\\\" and \\\\\$variables \\\\\\\${abcd} \\\\\$\\\\\(ls\\\\\)'
+    local text2='A test \\\"of quotes\\\" and \\\$variables \\\\\\\${abcd} \\\$\\\(ls\\\)'
+    local text3='A test \\\\\\\"of quotes\\\\\\\" and \\\\\\\$variables \\\\\\\\\\\\\${abcd} \\\\\\\$\\\\\\\(ls\\\\\\\)'
     local text4='A test \"of quotes\" and $variables \${abcd} $(ls)'
     local text5='A test \"of quotes\" and $variables \${abcd} $\(ls)'
 
