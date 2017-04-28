@@ -15,7 +15,6 @@
 #
 ---
 @source: "@{DIR}/../Spacefile.sh"
-@clone: string
 
 _info:
     title: Test suite for the String module.
