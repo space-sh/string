@@ -179,12 +179,12 @@ _TEST_STRING_ESCAPE()
 {
     SPACE_DEP="STRING_ESCAPE PRINT"
 
-    local text='A test "of quotes" and $variables \${abcd} $(ls)'
-    local text1='A test \"of quotes\" and \$variables \\\${abcd} \$\(ls\)'
-    local text2='A test \\\"of quotes\\\" and \\\$variables \\\\\\\${abcd} \\\$\\\(ls\\\)'
-    local text3='A test \\\\\\\"of quotes\\\\\\\" and \\\\\\\$variables \\\\\\\\\\\\\${abcd} \\\\\\\$\\\\\\\(ls\\\\\\\)'
-    local text4='A test \"of quotes\" and $variables \${abcd} $(ls)'
-    local text5='A test \"of quotes\" and $variables \${abcd} $\(ls)'
+    local text='A test "of quotes" and $variables ${abcd} $(ls)'
+    local text1='A test \"of quotes\" and \$variables \${abcd} \$(ls)'
+    local text2='A test \\\"of quotes\\\" and \\\$variables \\\${abcd} \\\$(ls)'
+    local text3='A test \\\\\\\"of quotes\\\\\\\" and \\\\\\\$variables \\\\\\\${abcd} \\\\\\\$(ls)'
+    local text4='A test \\\\\\\\\\\\\\\"of quotes\\\\\\\\\\\\\\\" and \\\\\\\\\\\\\\\$variables \\\\\\\\\\\\\\\${abcd} \\\\\\\\\\\\\\\$(ls)'
+    local text5='A test \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"of quotes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" and \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$variables \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\${abcd} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$(ls)'
 
     local s="${text}"
     STRING_ESCAPE "s"
@@ -203,7 +203,7 @@ _TEST_STRING_ESCAPE()
         return 1
     fi
 
-    STRING_ESCAPE "s"
+    STRING_ESCAPE "s" '"$'  # Default chars
 
     if [ "${s}" != "${text3}" ]; then
         PRINT "Could not escape to text3." "error"
@@ -211,8 +211,7 @@ _TEST_STRING_ESCAPE()
         return 1
     fi
 
-    local s="${text}"
-    STRING_ESCAPE "s" '"'
+    STRING_ESCAPE "s"
 
     if [ "${s}" != "${text4}" ]; then
         PRINT "Could not escape to text4." "error"
@@ -220,12 +219,26 @@ _TEST_STRING_ESCAPE()
         return 1
     fi
 
-    local s="${text}"
-    STRING_ESCAPE "s" '"('
+    STRING_ESCAPE "s"
 
     if [ "${s}" != "${text5}" ]; then
         PRINT "Could not escape to text5." "error"
         PRINT "Expected: '${text5}' got '${s}'"
+        return 1
+    fi
+
+    local text6='A test "of quotes" and $variables ${abcd} $\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\(ls\)'
+    local s="${text}"
+    STRING_ESCAPE "s" "("
+    STRING_ESCAPE "s" "("
+    STRING_ESCAPE "s" "("
+    STRING_ESCAPE "s" "("
+    STRING_ESCAPE "s" "("
+    STRING_ESCAPE "s" ")"
+
+    if [ "${s}" != "${text6}" ]; then
+        PRINT "Could not escape to text6." "error"
+        PRINT "Expected: '${text1}' got '${s}'"
         return 1
     fi
 }
