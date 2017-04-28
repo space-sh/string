@@ -170,7 +170,6 @@ STRING_INDEXOF()
 #=============
 STRING_ESCAPE()
 {
-    # TODO: add &|<> ?
     SPACE_SIGNATURE="varname:1 [escapes]"
     SPACE_DEP="_STRING_ESCAPE"
 
