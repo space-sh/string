@@ -157,13 +157,15 @@ STRING_INDEXOF()
 #=============
 # STRING_ESCAPE
 #
-# Escape in place up the occurrences of quotes, dollar signs and parenthesis.
+# Escape in place up the occurrences of quotes, dollar signs, parenthesis, etc.
 #
-# It is optional which of ", $, ( and ) to escape.
+# This function can escape up to five levels, then it breaks.
+#
+# It is optional which of ", $, (, ), <, >, | and & to escape.
 #
 # Parameters:
 #   $1: Name of the variable to escape up, in place.
-#   $2: Optional which characters to escape, defaults to '"$()'.
+#   $2: Optional which characters to escape, defaults to '"$'.
 #
 #=============
 STRING_ESCAPE()
@@ -172,26 +174,14 @@ STRING_ESCAPE()
     SPACE_SIGNATURE="varname:1 [escapes]"
     SPACE_DEP="_STRING_ESCAPE"
 
-    case "${2-\"\$\(\)}" in
-        *\"*)
-            _STRING_ESCAPE "${1}" '"'
-            ;;
-    esac
-    case "${2-\"\$\(\)}" in
-        *\$*)
-            _STRING_ESCAPE "${1}" '$'
-            ;;
-    esac
-    case "${2-\"\$\(\)}" in
-        *\(*)
-            _STRING_ESCAPE "${1}" '('
-            ;;
-    esac
-    case "${2-\"\$\(\)}" in
-        *\)*)
-            _STRING_ESCAPE "${1}" ')'
-            ;;
-    esac
+    local ___char=
+    for ___char in \" \$ \( \) \< \> \| \&; do
+        case "${2-\"\$}" in
+            *${___char}*)
+                _STRING_ESCAPE "${1}" "${___char}"
+                ;;
+        esac
+    done
 }
 
 
@@ -203,6 +193,12 @@ STRING_ESCAPE()
 #
 # Helper function.
 #
+# This function can escape up to five levels, then it breaks.
+#
+# Parameters:
+#   $1: name of variable to escape
+#   $2: character to escape.
+#
 #===============
 _STRING_ESCAPE()
 {
@@ -211,18 +207,18 @@ _STRING_ESCAPE()
 
     local __count=0
     local __a=
-    for __a in '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ""; do
+    for __a in '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\' '\\\\\\\\\\\\' '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ""; do
         __count=$((__count+1))
         __a="$__a\\${2}"
-        local __tag="_SPACEGAL_SUBST_TAG333_${__count}"
+        local __tag="_SPACEGAL_SUBST_TAG333_${__count}_"
         STRING_SUBST "${1}" "${__a}" "$__tag" "1"
 
     done
     __count=0
-    for __a in '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ''; do
+    for __a in '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\' '\\\\\\\\\\\\' '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ""; do
         __count=$((__count+1))
         __a="$__a\\${2}"
-        local __tag="_SPACEGAL_SUBST_TAG333_${__count}"
+        local __tag="_SPACEGAL_SUBST_TAG333_${__count}_"
         STRING_SUBST "${1}" "${__tag}" "$__a" "1"
     done
 }
