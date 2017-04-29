@@ -192,8 +192,6 @@ STRING_ESCAPE()
 #
 # Helper function.
 #
-# This function can escape up to five levels, then it breaks.
-#
 # Parameters:
 #   $1: name of variable to escape
 #   $2: character to escape.
@@ -204,22 +202,39 @@ _STRING_ESCAPE()
     # shellcheck disable=2034
     SPACE_DEP="STRING_SUBST"
 
-    local __count=0
-    local __a=
-    for __a in '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\' '\\\\\\\\\\\\' '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ""; do
-        __count=$((__count+1))
-        __a="$__a\\${2}"
-        local __tag="_SPACEGAL_SUBST_TAG333_${__count}_"
-        STRING_SUBST "${1}" "${__a}" "$__tag" "1"
+    local __right=
+    local __result=""
+    eval "__right=\$${1}"
+    local __left=
+    while true; do
+        # Cut from right up until last occurrence of char.
+        __left="${__right%%${2}*}"
+        if [ "${__left}" = "${__right}" ]; then
+            # Done
+            __result="${__result}${__left}"
+            break
+        fi
+        __right="${__right#$__left}"
+        # This seems to be necessary the remove the escapes properly.
+        __right="${__right#*${2}}"
+        # Now cut away from right all escapes, one by one..
+        local __escapes=""
+        local __left2=
+        while true; do
+            __left2="${__left%[\\]}"
+            if [ "${__left2}" = "${__left}" ]; then
+                # No more escapes
+                break
+            fi
+            # Escape encountered
+            __escapes="${__escapes}\\"
+            __left="${__left2}"
+        done
+        # Double the number of escapes and add one.
+        __result="${__result}${__left}${__escapes}${__escapes}\\${2}"
+    done
 
-    done
-    __count=0
-    for __a in '\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\\\' '\\\\\\\\\\\\\\' '\\\\\\\\\\\\' '\\\\\\\\\\' '\\\\\\\\' '\\\\\\' '\\\\' '\\' ""; do
-        __count=$((__count+1))
-        __a="$__a\\${2}"
-        local __tag="_SPACEGAL_SUBST_TAG333_${__count}_"
-        STRING_SUBST "${1}" "${__tag}" "$__a" "1"
-    done
+    eval "${1}=\${__result}"
 }
 
 
