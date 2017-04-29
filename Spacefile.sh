@@ -159,8 +159,6 @@ STRING_INDEXOF()
 #
 # Escape in place up the occurrences of quotes, dollar signs, parenthesis, etc.
 #
-# This function can escape up to five levels, then it breaks.
-#
 # It is optional which of ", $, (, ), <, >, | and & to escape.
 #
 # Parameters:
@@ -199,9 +197,6 @@ STRING_ESCAPE()
 #===============
 _STRING_ESCAPE()
 {
-    # shellcheck disable=2034
-    SPACE_DEP="STRING_SUBST"
-
     local __right=
     local __result=""
     eval "__right=\$${1}"
@@ -233,7 +228,6 @@ _STRING_ESCAPE()
         # Double the number of escapes and add one.
         __result="${__result}${__left}${__escapes}${__escapes}\\${2}"
     done
-
     eval "${1}=\${__result}"
 }
 
