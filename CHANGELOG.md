@@ -1,5 +1,12 @@
 # Space Module change log - string
 
+## [1.0.3 - 2017-05-02]
+
+* Change `STRING_ESCAPE` to handle infinite levels of escaping
+
+* Remove `STRING_SUBST` dependency in `STRING_ESCAPE` function
+
+
 ## [1.0.2 - 2017-04-28]
 
 * Remove unnecessary `@clone` from test.yaml to always run against local master
