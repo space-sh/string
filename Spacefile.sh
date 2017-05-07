@@ -300,3 +300,47 @@ STRING_ITEM_GET()
         __count=$((__count+1))
     done
 }
+
+#====================
+# STRING_ITEM_INDEXOF
+#
+# Find the first index of item in string.
+#
+# Parameters:
+#   $1: string to lookup item in.
+#   $2: string of item to find.
+#   $3: variable name to store item index in, -1 when not found.
+#
+# Returns:
+#   0: if item found, 1 otherwise.
+#
+#====================
+STRING_ITEM_INDEXOF()
+{
+    SPACE_SIGNATURE="string item [outvarname]"
+
+    local __s="${1}"
+    shift
+
+    local __item="${1}"
+    shift
+
+    local __outvar="${1-}"
+    shift $(( $# > 0 ? 1 : 0 ))
+
+    local __item2=
+    local __count=0
+    for __item2 in ${__s}; do
+        if [ "${__item}" = "${__item2}" ]; then
+            if [ -n "${__outvar}" ]; then
+                eval "${__outvar}=\"\${__count}\""
+            fi
+            return 0
+        fi
+        __count=$((__count+1))
+    done
+    if [ -n "${__outvar}" ]; then
+        eval "${__outvar}=\"-1\""
+    fi
+    return 1
+}
