@@ -36,7 +36,7 @@
 #============
 STRING_TRIM()
 {
-    SPACE_SIGNATURE="varname:1"
+    SPACE_SIGNATURE="varname"
 
     # shellcheck disable=SC2034
     local __sopriv=
@@ -72,7 +72,7 @@ STRING_TRIM()
 #=============
 STRING_SUBST()
 {
-    SPACE_SIGNATURE="varname:1 match:1 replace:1 [global]"
+    SPACE_SIGNATURE="varname match replace [global]"
 
     local __varname="${1}"
     local __rstring=
@@ -120,13 +120,12 @@ STRING_SUBST()
 #   $3: optional variable name to store index value to. -1 when sub string not found.
 #
 # Returns:
-#   0: if sub string found and no $3 variable name is given.
-#   1: if sub string not found and no $3 variable name is given.
+#   0: if sub string found, 1 otherwise.
 #
 #=============
 STRING_INDEXOF()
 {
-    SPACE_SIGNATURE="substring:1 string:1 [outvarname]"
+    SPACE_SIGNATURE="substring string [outvarname]"
 
     local substr="${1}"
     shift
@@ -142,10 +141,8 @@ STRING_INDEXOF()
     if [ "${rest}" = "${string}" ]; then
         if [ -n "${varname}" ]; then
             eval "${varname}=\"-1\""
-            return 0
-        else
-            return 1
         fi
+        return 1
     fi
 
     if [ -n "${varname}" ]; then
@@ -168,7 +165,7 @@ STRING_INDEXOF()
 #=============
 STRING_ESCAPE()
 {
-    SPACE_SIGNATURE="varname:1 [escapes]"
+    SPACE_SIGNATURE="varname [escapes]"
     SPACE_DEP="_STRING_ESCAPE"
 
     local ___char=
@@ -247,7 +244,7 @@ _STRING_ESCAPE()
 #==================
 STRING_ITEM_COUNT()
 {
-    SPACE_SIGNATURE="string:1 outvarname:1"
+    SPACE_SIGNATURE="string outvarname"
 
     local __s="${1}"
     shift
@@ -282,7 +279,7 @@ STRING_ITEM_COUNT()
 STRING_ITEM_GET()
 {
     # shellcheck disable=2034
-    SPACE_SIGNATURE="string:1 itemindex:1 outvarname:1"
+    SPACE_SIGNATURE="string itemindex outvarname"
 
     local __s="${1}"
     shift
