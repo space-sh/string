@@ -1,5 +1,12 @@
 # Space Module change log - string
 
+## [1.1.0 - 2017-05-09]
+
+* Add `STRING_ITEM_INDEXOF` function
+
+* Update all `SPACE_SIGNATURE`
+
+
 ## [1.0.3 - 2017-05-02]
 
 * Change `STRING_ESCAPE` to handle infinite levels of escaping
