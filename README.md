@@ -47,8 +47,7 @@ Find the first index of sub string in string.
 - $3: optional variable name to store index value to. -1 when sub string not found.  
   
 ### Returns:  
-- 0: if sub string found and no $3 variable name is given.  
-- 1: if sub string not found and no $3 variable name is given.  
+- 0: if sub string found, 1 otherwise.  
   
   
   
@@ -56,13 +55,13 @@ Find the first index of sub string in string.
   
   
   
-Escape in place up the occurrences of quotes, dollar signs and parenthesis.  
+Escape in place up the occurrences of quotes, dollar signs, parenthesis, etc.  
   
-It is optional which of ", $, ( and ) to escape.  
+It is optional which of ", $, (, ), <, >, | and & to escape.  
   
 ### Parameters:  
 - $1: Name of the variable to escape up, in place.  
-- $2: Optional which characters to escape, defaults to '"$()'.  
+- $2: Optional which characters to escape, defaults to '"$'.  
   
   
   
@@ -71,6 +70,10 @@ It is optional which of ", $, ( and ) to escape.
   
   
 Helper function.  
+  
+### Parameters:  
+- $1: name of variable to escape  
+- $2: character to escape.  
   
   
   
@@ -97,6 +100,22 @@ where string is split on the current IFS.
 - $1: string to get item from.  
 - $2: index of item to get.  
 - $3: variable name to store item to.  
+  
+  
+  
+## STRING\_ITEM\_INDEXOF()  
+  
+  
+  
+Find the first index of item in string.  
+  
+### Parameters:  
+- $1: string to lookup item in.  
+- $2: string of item to find.  
+- $3: variable name to store item index in, -1 when not found.  
+  
+### Returns:  
+- 0: if item found, 1 otherwise.  
   
   
   
