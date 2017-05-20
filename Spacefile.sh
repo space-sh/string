@@ -41,6 +41,7 @@ STRING_TRIM()
     # shellcheck disable=SC2034
     local __sopriv=
     eval "__sopriv=\"\${${1}}\""
+    # shellcheck disable=SC2034
     local __tab="	"
     while true; do
         eval "${1}=\"\${$1#\"\${$1%%[! ]*}\"}\""
@@ -151,6 +152,10 @@ STRING_INDEXOF()
     return 0
 }
 
+
+# Disable warning about local keyword usage
+# shellcheck disable=SC2039
+
 #=============
 # STRING_ESCAPE
 #
@@ -166,6 +171,7 @@ STRING_INDEXOF()
 STRING_ESCAPE()
 {
     SPACE_SIGNATURE="varname [escapes]"
+    # shellcheck disable=SC2034
     SPACE_DEP="_STRING_ESCAPE"
 
     local ___char=
@@ -301,6 +307,10 @@ STRING_ITEM_GET()
     done
 }
 
+
+# Disable warning about local keyword usage
+# shellcheck disable=SC2039
+
 #====================
 # STRING_ITEM_INDEXOF
 #
@@ -317,6 +327,7 @@ STRING_ITEM_GET()
 #====================
 STRING_ITEM_INDEXOF()
 {
+    # shellcheck disable=SC2034
     SPACE_SIGNATURE="string item [outvarname]"
 
     local __s="${1}"
