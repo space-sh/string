@@ -1,5 +1,12 @@
 # Space Module change log - string
 
+## [1.2.0 - 2017-11-29]
+
++ Add `STRING_LPAD` function
+
++ Add `STRING_RPAD` function
+
+
 ## [1.1.1 - 2017-06-11]
 
 * Update documentation
