@@ -21,14 +21,10 @@
 #============
 # STRING_TRIM
 #
-# Trim whitespace (spaces and tabs) from a string left and right.
+# Trim whitespace (spaces and tabs) from a string left and right in place.
 #
 # Parameters:
 #   $1: the name of the variable to trim.
-#
-# Expects:
-#   $1: The variable should be set with the value to trim.
-#       This variable is directly trimmed on.
 #
 # Returns:
 #   non-zero if string error
@@ -354,4 +350,64 @@ STRING_ITEM_INDEXOF()
         eval "${__outvar}=\"-1\""
     fi
     return 1
+}
+
+#============
+# STRING_LPAD
+#
+# Left pad a string with a given character, in place.
+#
+# Parameters:
+#   $1: the name of the variable to trim.
+#   $2: the character to pad with
+#   $3: the final length of the string
+#
+# Returns:
+#   zero
+#
+#============
+STRING_LPAD()
+{
+    SPACE_SIGNATURE="varname char length"
+
+    local __char="${2}"
+    local __length="${3}"
+
+    # shellcheck disable=SC2034
+    local __sopriv=
+    eval "__sopriv=\"\${${1}}\""
+    while [ "${#__sopriv}" -lt "${__length}" ]; do
+        __sopriv="${__char}${__sopriv}"
+    done
+    eval "${1}=\"\${__sopriv}\""
+}
+
+#============
+# STRING_RPAD
+#
+# Right pad a string with a given character, in place.
+#
+# Parameters:
+#   $1: the name of the variable to trim.
+#   $2: the character to pad with
+#   $3: the final length of the string
+#
+# Returns:
+#   zero
+#
+#============
+STRING_RPAD()
+{
+    SPACE_SIGNATURE="varname char length"
+
+    local __char="${2}"
+    local __length="${3}"
+
+    # shellcheck disable=SC2034
+    local __sopriv=
+    eval "__sopriv=\"\${${1}}\""
+    while [ "${#__sopriv}" -lt "${__length}" ]; do
+        __sopriv="${__sopriv}${__char}"
+    done
+    eval "${1}=\"\${__sopriv}\""
 }
