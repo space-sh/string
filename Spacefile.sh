@@ -157,7 +157,7 @@ STRING_INDEXOF()
 #
 # Escape in place up the occurrences of quotes, dollar signs, parenthesis, etc.
 #
-# It is optional which of ", $, (, ), <, >, | and & to escape.
+# It is optional which of ", $, (, ), <, >, |, &, / to escape.
 #
 # Parameters:
 #   $1: Name of the variable to escape up, in place.
@@ -171,7 +171,7 @@ STRING_ESCAPE()
     SPACE_DEP="_STRING_ESCAPE"
 
     local ___char=
-    for ___char in \" \$ \( \) \< \> \| \&; do
+    for ___char in \" \$ \( \) \< \> \| \& \/; do
         case "${2-\"\$}" in
             *${___char}*)
                 _STRING_ESCAPE "${1}" "${___char}"
@@ -311,11 +311,12 @@ STRING_ITEM_GET()
 # STRING_ITEM_INDEXOF
 #
 # Find the first index of item in string.
+# Items are split on current IFS.
 #
 # Parameters:
 #   $1: string to lookup item in.
 #   $2: string of item to find.
-#   $3: variable name to store item index in, -1 when not found.
+#   $3: variable name to store item index in, -1 when not found (optional).
 #
 # Returns:
 #   0: if item found, 1 otherwise.
@@ -410,4 +411,156 @@ STRING_RPAD()
         __sopriv="${__sopriv}${__char}"
     done
     eval "${1}=\"\${__sopriv}\""
+}
+
+# TODO: add tests for this
+#============
+# STRING_SUBSTR
+#
+# Get a substring by index (positive or negative) and a length.
+# If index and length are out of bounds then empty string is returned.
+#
+# Parameters:
+#   $1: the name of the variable to get single char from
+#   $2: index, the numeric index of the char, negative values count from the end of string as -1 = last char
+#   $3: length, number of chars to get. If "" then take rest of line. If negative then count from the end of the string where -1 cuts away the last char.
+#   $4: variable name to store character in, empty string if index out of bounds.
+#
+# Returns:
+#   zero
+#
+#============
+STRING_SUBSTR()
+{
+    SPACE_SIGNATURE="varname index length:0 outvarname"
+    SPACE_DEP="STRING_REPEAT"
+
+    # shellcheck disable=SC2034
+    local __sopriv=
+    eval "__sopriv=\"\${${1}}\""
+    shift
+
+    local __index="${1}"
+    shift
+
+    local __length="${1}"
+    shift
+
+    local __outvar="${1}"
+    shift
+
+    local __strlength="${#__sopriv}"
+
+    if [ "${__index}" -lt 0 ]; then
+        __index=$((__strlength+__index))
+    fi
+
+    if [ "${__index}" -ge 0 ]; then
+        if [ "${__length}" = "" ]; then
+            __length=$((__strlength-__index))
+        fi
+
+        if [ "${__length}" -lt 0 ]; then
+            __length=$((__strlength-__index+__length))
+        fi
+
+        if [ "$((__index+__length))" -le "${#__sopriv}" ]; then
+            local __wildcard=
+            STRING_REPEAT "?" "${__index}" "" "__wildcard"
+            local __substr="${__sopriv#${__wildcard}}"
+            STRING_REPEAT "?" "$((${#__substr}-__length))" "" "__wildcard"
+            __substr="${__substr%${__wildcard}}"
+            eval "${__outvar}=\"\${__substr}\""
+            return 0
+        fi
+
+    fi
+
+    eval "${__outvar}=\"\""
+}
+
+# TODO: add tests for this
+#============
+# STRING_REPEAT
+#
+# Repeat a string x times.
+#
+# Parameters:
+#   $1: the string to repeat
+#   $2: count, the number of times to repeat the string
+#   $3: separator, string separator between repeated string
+#   $4: variable name to store string to
+#
+# Returns:
+#   zero
+#
+#============
+STRING_REPEAT()
+{
+    SPACE_SIGNATURE="string count separator:0 outvarname"
+
+    local __string="${1}"
+    shift
+
+    local __count="${1}"
+    shift
+
+    local __separator="${1}"
+    shift
+
+    local __outvar="${1}"
+    shift
+
+    local __repeatedstring=""
+    while [ "${__count}" -gt 0 ]; do
+        __count=$((__count-1))
+        __repeatedstring="${__repeatedstring}${__string}"
+        if [ "${__count}" -gt 0 ]; then
+            __repeatedstring="${__repeatedstring}${__separator}"
+        fi
+    done
+
+    eval "${__outvar}=\"\${__repeatedstring}\""
+}
+
+# TODO: add tests for this
+#============
+# STRING_HASH
+#
+# Hash a string using a native sha256 program
+#
+# Parameters:
+#   $1: the string to hash
+#   $2: variable name to store hash into
+#
+# Returns:
+#   0: on success
+#   1: if no sha256 binary forund on system
+#
+#============
+STRING_HASH()
+{
+    SPACE_SIGNATURE="str"
+
+    local __str="${1}"
+    shift
+
+    local __outvar="${1}"
+    shift
+
+    local SHASUMBIN=
+    if command -v sha256sum >/dev/null; then
+        SHASUMBIN="sha256sum"
+    elif command -v shasum >/dev/null; then
+        SHASUMBIN="shasum -a 256"
+    fi
+
+    if [ -z "${SHASUMBIN}" ]; then
+        return 1
+    fi
+
+    local __hash=
+    __hash=$(printf "%s\\n" "${__str}" |${SHASUMBIN}) || { return 1; }
+    __hash="${__hash%%[ ]*}"
+    eval "${__outvar}=\"\${__hash}\""
 }
