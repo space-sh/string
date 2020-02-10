@@ -535,7 +535,7 @@ STRING_REPEAT()
 #
 # Returns:
 #   0: on success
-#   1: if no sha256 binary forund on system
+#   1: if no sha256 binary found on system
 #
 #============
 STRING_HASH()
