@@ -1,5 +1,18 @@
 # Space Module change log - string
 
+## [1.3.0 - 2020-02-10]
+
++ Add '/' as optional escape character to `STRING_ESCAPE`
+
++ Add `STRING_SUBSTR`
+
++ Add `STRING_REPEAT`
+
++ Add `STRING_HASH`
+
+* Update `STRING_ITEM_INDEXOF` comments
+
+
 ## [1.2.0 - 2017-11-29]
 
 + Add `STRING_LPAD` function
