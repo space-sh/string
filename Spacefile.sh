@@ -421,23 +421,24 @@ STRING_RPAD()
 # If index and length are out of bounds then empty string is returned.
 #
 # Parameters:
-#   $1: the name of the variable to get single char from
-#   $2: index, the numeric index of the char, negative values count from the end of string as -1 = last char
-#   $3: length, number of chars to get. If "" then take rest of line. If negative then count from the end of the string where -1 cuts away the last char.
-#   $4: variable name to store character in, empty string if index out of bounds.
+#   $1: the string value to extract sub string from
+#   $2: index, the numeric index of the sub string, negative values count from the end of string as -1 = from last character
+#   $3: length, number of characters to get. If length=="" then take rest of line. If a negative value then count from the end of the string where -1 cuts away the last char.
+#   $4: variable name to store sub string to, will be empty string if index is out of bounds.
+#       If not provided then result will be output to stdout
 #
 # Returns:
 #   zero
+# stdout: substring, if arg $4 is left out
 #
 #============
 STRING_SUBSTR()
 {
-    SPACE_SIGNATURE="varname index length:0 outvarname"
+    SPACE_SIGNATURE="str index length:0 outvarname"
     SPACE_DEP="STRING_REPEAT"
 
     # shellcheck disable=SC2034
-    local __sopriv=
-    eval "__sopriv=\"\${${1}}\""
+    local __sopriv="${1}"
     shift
 
     local __index="${1}"
@@ -446,8 +447,8 @@ STRING_SUBSTR()
     local __length="${1}"
     shift
 
-    local __outvar="${1}"
-    shift
+    local __outvar="${1:-}"
+    shift $(( $# > 0 ? 1 : 0 ))
 
     local __strlength="${#__sopriv}"
 
@@ -470,13 +471,19 @@ STRING_SUBSTR()
             local __substr="${__sopriv#${__wildcard}}"
             STRING_REPEAT "?" "$((${#__substr}-__length))" "" "__wildcard"
             __substr="${__substr%${__wildcard}}"
-            eval "${__outvar}=\"\${__substr}\""
+            if [ -n "${__outvar}" ]; then
+                eval "${__outvar}=\"\${__substr}\""
+            else
+                printf "%s\\n" "${__outvar}"
+            fi
             return 0
         fi
 
     fi
 
-    eval "${__outvar}=\"\""
+    if [ -n "${__outvar}" ]; then
+        eval "${__outvar}=\"\""
+    fi
 }
 
 # TODO: add tests for this
