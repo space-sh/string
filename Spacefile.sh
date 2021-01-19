@@ -571,3 +571,79 @@ STRING_HASH()
     __hash="${__hash%%[ ]*}"
     eval "${__outvar}=\"\${__hash}\""
 }
+
+# TODO: add tests for this
+#============
+# STRING_IS_ALL
+#
+# Check so that a string only contains character given in the pattern
+#
+# Parameters:
+#   $1: the string to check
+#   $2: the pattern to check the string against.
+#       a pattern is like "abcde", "a-z", "0-9", "a-z0-9_-", "A-Za-z0-9", etc.
+#
+# Returns:
+#   0: if all characters are within the pattern given
+#   1: if any charactre is outside of the pattern
+#
+#============
+STRING_IS_ALL()
+{
+    SPACE_SIGNATURE="str:0 pattern"
+
+    local __str="${1}"
+    shift
+
+    local __pattern="${1}"
+    shift
+
+    local __m="[!${__pattern}]"
+    case "${__str}" in
+        (*${__m}*)
+            return 1
+            ;;
+        *)
+            ;;
+    esac
+}
+
+# TODO: add tests for this
+#============
+# STRING_IS_NUMBER
+#
+# Check so that a string represents a number
+#
+# Parameters:
+#   $1: the string to check
+#   $2: set to "1" to allow negative values
+#
+# Returns:
+#   0: if number
+#   1: if error
+#
+#============
+STRING_IS_NUMBER()
+{
+    SPACE_SIGNATURE="s [allowNegative]"
+    SPACE_DEP="STRING_IS_ALL"
+
+    local __s="${1}"
+    shift
+
+    local __allowNegative="${1:-0}"
+
+    local __s2="${__s#-}"
+
+    if [ "${__s}" != "${__s2}" ] && [ "${__allowNegative}" != 1 ]; then
+        return 1
+    fi
+
+    case "${__s2}" in
+        ''|*[!0-9]*)
+            return 1
+            ;;
+        *)
+            ;;
+    esac
+}
