@@ -1,5 +1,14 @@
 # Space Module change log - string
 
+## [1.4.0 - 2021-01-19]
+
++ Add `STRING_IS_ALL`
+
++ Add `STRING_IS_NUMBER`
+
+* Change `STRING_SUBSTR` to take `value` as first argument
+
+
 ## [1.3.0 - 2020-02-10]
 
 + Add '/' as optional escape character to `STRING_ESCAPE`
